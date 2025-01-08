@@ -8,3 +8,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:8080", "--access-logfile", "-", "--error-logfile", "-"]
+HEALTHCHECK CMD curl --fail http://localhost:8080/healthz || exit 1
