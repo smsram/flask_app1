@@ -14,7 +14,7 @@ app = Flask(__name__)
 CORS(app)  # This allows all origins by default
 
 # Get the API key from environment variable
-api_key = os.environ("API_KEY")
+api_key = os.getenv("API_KEY")
 if api_key is None:
     raise ValueError("API key not found. Please check your .env file.")
 
@@ -35,6 +35,7 @@ model = genai.GenerativeModel(
     model_name="gemini-2.0-flash-exp",
     generation_config=generation_config,
 )
+
 
 # Define a route for AI response
 @app.route('/chat', methods=['POST'])
@@ -58,6 +59,11 @@ def chat():
         # Return an error response if something goes wrong
         return jsonify({"error": f"Failed to process request: {str(e)}"}), 500
 
+@app.route('/')
+def home():
+    return "Flask server is running! Use the /chat route to interact with the AI."
+
 if __name__ == '__main__':
     # Start the Flask app
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=8080)
+    # app.run(debug=True)
